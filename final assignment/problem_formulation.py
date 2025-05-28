@@ -3,6 +3,9 @@ Created on Wed Mar 21 17:34:11 2018
 
 @author: ciullo
 """
+
+import sys
+print(sys.executable)
 from ema_workbench import (
     Model,
     CategoricalParameter,
@@ -270,29 +273,76 @@ def get_model_for_problem_formulation(problem_formulation_id):
     # Disaggregate over locations:
     elif problem_formulation_id == 3:
         outcomes = []
+        annual_damage_gelderland=[]
+        dike_investment_costs_gelderland = []
+        number_of_deaths_gelderland = []
+        annual_damage_overijssel= []
+        dike_investment_costs_overijssel = []
+        number_of_deaths_overijssel = []
 
-        for dike in function.dikelist:
-            cost_variables = []
-            for e in ["Expected Annual Damage", "Dike Investment Costs"]:
-                cost_variables.append(f"{dike}_{e}")
+        for dike in function.dikelist[:3]:
+            annual_damage_gelderland.append(f"{dike}_Expected Annual Damage")
+            dike_investment_costs_gelderland.append(f"{dike}_Dike Investment Costs")
+            number_of_deaths_gelderland.append(f"{dike}_Expected Number of Deaths")
 
-            outcomes.append(
-                ScalarOutcome(
-                    f"{dike} Total Costs",
-                    variable_name=[var for var in cost_variables],
-                    function=sum_over,
-                    kind=direction,
-                )
+        outcomes.append(
+            ScalarOutcome(
+                f"Gelderland Expected Annual Damage",
+                variable_name=[var for var in annual_damage_gelderland],
+                function=sum_over,
+                kind=direction,
             )
+        )
 
-            outcomes.append(
-                ScalarOutcome(
-                    f"{dike}_Expected Number of Deaths",
-                    variable_name=f"{dike}_Expected Number of Deaths",
-                    function=sum_over,
-                    kind=direction,
-                )
+        outcomes.append(
+            ScalarOutcome(
+                f"Gelderland Dike Investment Costs",
+                variable_name=[var for var in dike_investment_costs_gelderland],
+                function=sum_over,
+                kind=direction,
             )
+        )
+
+        outcomes.append(
+            ScalarOutcome(
+                f"Gelderland Expected Number of Deaths",
+                variable_name=[var for var in number_of_deaths_gelderland],
+                function=sum_over,
+                kind=direction,
+            )
+        )
+
+        for dike in function.dikelist[-2:]:
+            annual_damage_overijssel.append(f"{dike}_Expected Annual Damage")
+            dike_investment_costs_overijssel.append(f"{dike}_Dike Investment Costs")
+            number_of_deaths_overijssel.append(f"{dike}_Expected Number of Deaths")
+        
+        outcomes.append(
+            ScalarOutcome(
+                f"Overijssel Expected Annual Damage",
+                variable_name=[var for var in annual_damage_overijssel],
+                function=sum_over,
+                kind=direction,
+            )
+        )       
+
+        outcomes.append(
+            ScalarOutcome(
+                f"Overijssel Dike Investment Costs",
+                variable_name=[var for var in dike_investment_costs_overijssel],
+                function=sum_over,
+                kind=direction,
+            )
+        )   
+
+        outcomes.append(
+            ScalarOutcome(
+                f"Overijssel Expected Number of Deaths",   
+                variable_name=[var for var in number_of_deaths_overijssel],
+                function=sum_over,
+                kind=direction,
+            )
+        )         
 
         outcomes.append(
             ScalarOutcome(
