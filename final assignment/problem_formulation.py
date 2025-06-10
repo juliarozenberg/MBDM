@@ -62,6 +62,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
     function = DikeNetwork()
     # workbench model:
     dike_model = Model("dikesnet", function=function)
+    MAXIMIZE = ScalarOutcome.MAXIMIZE
+    MINIMIZE = ScalarOutcome.MINIMIZE
 
     # Uncertainties and Levers:
     # Specify uncertainties range:
@@ -219,56 +221,98 @@ def get_model_for_problem_formulation(problem_formulation_id):
 
     # 5-objectives PF:
     elif problem_formulation_id == 2:
-        damage_variables = []
-        dike_cost_variables = []
-        rfr_costs_variables = []
-        evac_cost_variables = []
-        casuality_varaibles = []
+        outcomes = []
+        annual_damage_gelderland=[]
+        dike_investment_costs_gelderland = []
+        number_of_deaths_gelderland = []
+        annual_damage_overijssel= []
+        dike_investment_costs_overijssel = []
+        number_of_deaths_overijssel = []
 
-        damage_variables.extend(
-            [f"{dike}_Expected Annual Damage" for dike in function.dikelist]
-        )
-        dike_cost_variables.extend(
-            [f"{dike}_Dike Investment Costs" for dike in function.dikelist]
-        )
-        rfr_costs_variables.extend([f"RfR Total Costs"])
-        evac_cost_variables.extend([f"Expected Evacuation Costs"])
-        casuality_varaibles.extend(
-            [f"{dike}_Expected Number of Deaths" for dike in function.dikelist]
+        for dike in function.dikelist[:3]:
+            print(dike)
+            annual_damage_gelderland.append(f"{dike}_Expected Annual Damage")
+            dike_investment_costs_gelderland.append(f"{dike}_Dike Investment Costs")
+            number_of_deaths_gelderland.append(f"{dike}_Expected Number of Deaths")
+
+        outcomes.append(
+            ScalarOutcome(
+                f"Gelderland Expected Annual Damage",
+                variable_name=[var for var in annual_damage_gelderland],
+                function=sum_over,
+                kind=MINIMIZE,
+            )
         )
 
-        dike_model.outcomes = [
+        outcomes.append(
             ScalarOutcome(
-                "Expected Annual Damage",
-                variable_name=[var for var in damage_variables],
+                f"Gelderland Dike Investment Costs",
+                variable_name=[var for var in dike_investment_costs_gelderland],
                 function=sum_over,
-                kind=direction,
-            ),
+                kind=MINIMIZE,
+            )
+        )
+
+        outcomes.append(
             ScalarOutcome(
-                "Dike Investment Costs",
-                variable_name=[var for var in dike_cost_variables],
+                f"Gelderland Expected Number of Deaths",
+                variable_name=[var for var in number_of_deaths_gelderland],
                 function=sum_over,
-                kind=direction,
-            ),
+                kind=MINIMIZE,
+            )
+        )
+
+        for dike in function.dikelist[-2:]:
+            annual_damage_overijssel.append(f"{dike}_Expected Annual Damage")
+            dike_investment_costs_overijssel.append(f"{dike}_Dike Investment Costs")
+            number_of_deaths_overijssel.append(f"{dike}_Expected Number of Deaths")
+        
+        outcomes.append(
             ScalarOutcome(
-                "RfR Investment Costs",
-                variable_name=[var for var in rfr_costs_variables],
+                f"Overijssel Expected Annual Damage",
+                variable_name=[var for var in annual_damage_overijssel],
                 function=sum_over,
-                kind=direction,
-            ),
+                kind=MINIMIZE,
+            )
+        )       
+
+        outcomes.append(
             ScalarOutcome(
-                "Evacuation Costs",
-                variable_name=[var for var in evac_cost_variables],
+                f"Overijssel Dike Investment Costs",
+                variable_name=[var for var in dike_investment_costs_overijssel],
                 function=sum_over,
-                kind=direction,
-            ),
+                kind=MINIMIZE,
+            )
+        )   
+
+        outcomes.append(
             ScalarOutcome(
-                "Expected Number of Deaths",
-                variable_name=[var for var in casuality_varaibles],
+                f"Overijssel Expected Number of Deaths",   
+                variable_name=[var for var in number_of_deaths_overijssel],
                 function=sum_over,
-                kind=direction,
-            ),
-        ]
+                kind=MINIMIZE,
+            )
+        )         
+
+        outcomes.append(
+            ScalarOutcome(
+                "RfR Total Costs",
+                variable_name="RfR Total Costs",
+                function=sum_over,
+                kind=MINIMIZE,
+            )
+        )
+        outcomes.append(
+            ScalarOutcome(
+                "Expected Evacuation Costs",
+                variable_name="Expected Evacuation Costs",
+                function=sum_over,
+                kind=MINIMIZE,
+            )
+        )
+
+        dike_model.outcomes = outcomes
+
 
     # Disaggregate over locations:
     elif problem_formulation_id == 3:
@@ -281,6 +325,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
         number_of_deaths_overijssel = []
 
         for dike in function.dikelist[:3]:
+            print(dike)
             annual_damage_gelderland.append(f"{dike}_Expected Annual Damage")
             dike_investment_costs_gelderland.append(f"{dike}_Dike Investment Costs")
             number_of_deaths_gelderland.append(f"{dike}_Expected Number of Deaths")
@@ -428,3 +473,5 @@ def get_model_for_problem_formulation(problem_formulation_id):
 
 if __name__ == "__main__":
     get_model_for_problem_formulation(3)
+
+
