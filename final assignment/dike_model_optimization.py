@@ -12,34 +12,16 @@ from ema_workbench.util import ema_logging
 from problem_formulation import get_model_for_problem_formulation
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
-# ...existing code...
 
-def sum_over(*args):
-    numbers = []
-    for entry in args:
-        try:
-            value = sum(entry)
-        except TypeError:
-            value = entry
-        numbers.append(value)
-
-    return sum(numbers)
-
-
-def sum_over_time(*args):
-    data = np.asarray(args)
-    summed = data.sum(axis=0)
-    return summed
-
-archives_dir = "./archives"
-os.makedirs(archives_dir, exist_ok=True)
 
 if __name__ == "__main__":
     ema_logging.log_to_stderr(ema_logging.INFO)
 
-
     model, steps = get_model_for_problem_formulation(2)
+
+    from ema_workbench.em_framework import sample_uncertainties
+    n_scenarios = 2
+    scenarios = sample_uncertainties(model, n_scenarios)
 
     reference_values = {
         "Bmax": 175,
@@ -63,27 +45,26 @@ if __name__ == "__main__":
 
     ref_scenario = Scenario("reference", **scen1)
 
-    convergence_metrics = [EpsilonProgress()]
+    #convergence_metrics = [EpsilonProgress()]
 
     espilon = [1e3] * len(model.outcomes)
-    # define robustness_functions as all dikemodel.outcomes except Gelderland investment costs and gelderland anual demage
 
-    from ema_workbench.em_framework import sample_uncertainties
-    n_scenarios = 2
-    scenarios = sample_uncertainties(model, n_scenarios)
+    nfe = 2  # proof of principle only, way to low for actual use
 
-    dikemodel = model
-    MAXIMIZE = ScalarOutcome.MAXIMIZE
-    MINIMIZE = ScalarOutcome.MINIMIZE
+    import numpy as np
+    from ema_workbench import ScalarOutcome
 
 
     robustness_functions = [
-        outcome for outcome in model.outcomes ]
-
-    print(robustness_functions)
-
-
-
+        ScalarOutcome("Gelderland Expected Annual Damage", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("Gelderland Dike Investment Costs", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("Gelderland Expected Number of Deaths", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("Overijssel Expected Annual Damage", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("Overijssel Dike Investment Costs", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("Overijssel Expected Number of Deaths", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("RfR Total Costs", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+        ScalarOutcome("Expected Evacuation Costs", function=np.mean, kind=ScalarOutcome.MINIMIZE),
+    ]
 
     from ema_workbench.em_framework.optimization import ArchiveLogger, EpsilonProgress
 
@@ -100,20 +81,19 @@ if __name__ == "__main__":
         EpsilonProgress(),
     ]
 
-
-    from ema_workbench import SequentialEvaluator
-
-    with SequentialEvaluator(model) as evaluator:
+    with MultiprocessingEvaluator(model) as evaluator:
         results, convergence = evaluator.robust_optimize(
-            robustness_functions, scenarios,
-            nfe=nfe, epsilons=[0.05,]*len(robustness_functions),
+            robustness_functions,
+            scenarios,
+            nfe=nfe,
+            epsilons=[0.05] * len(robustness_functions),
             convergence=convergence_metrics,
         )
 
-        fig, (ax1, ax2) = plt.subplots(ncols=2, sharex=True)
-        fig, ax1 = plt.subplots(ncols=1)
-        ax1.plot(convergence.epsilon_progress)
-        ax1.set_xlabel("nr. of generations")
-        ax1.set_ylabel(r"$\epsilon$ progress")
-        plt.savefig(os.path.join(archives_dir, "convergence_plot.png"))
-        sns.despine()
+    fig, (ax1, ax2) = plt.subplots(ncols=2, sharex=True)
+    fig, ax1 = plt.subplots(ncols=1)
+    ax1.plot(convergence.epsilon_progress)
+    ax1.set_xlabel("nr. of generations")
+    ax1.set_ylabel(r"$\epsilon$ progress")
+    sns.despine()
+    print(results)
