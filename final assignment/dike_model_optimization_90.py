@@ -47,12 +47,12 @@ if __name__ == "__main__":
         nfe = int(20000)
         import os
 
-        archive_dir = f"./archives_seed_{seed}"
+        archive_dir = f"./archives_90_seed_{seed}"
         os.makedirs(archive_dir, exist_ok=True)  # This creates the directory if it doesn't exist
 
         convergence_metrics = [
             ArchiveLogger(
-                f"./archives_seed_{seed}",
+                f"./archives_90_seed_{seed}",
                 [l.name for l in model.levers],
                 [o.name for o in robustness_functions],
                 base_filename=f"robust_optimization_seed_{seed}.tar.gz",
