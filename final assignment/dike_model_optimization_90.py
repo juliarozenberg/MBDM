@@ -69,7 +69,9 @@ if __name__ == "__main__":
                 convergence=convergence_metrics,
             )
 
-
+        csv_path = os.path.join(archive_dir, f"results_seed_{seed}.csv")
+        results.to_csv(csv_path, index=False)
+        print(f"Results saved to {csv_path}")
 
 
         #fig, (ax1, ax2) = plt.subplots(ncols=2, sharex=True)

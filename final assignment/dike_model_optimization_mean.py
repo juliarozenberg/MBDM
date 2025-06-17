@@ -18,7 +18,7 @@ import random
 if __name__ == "__main__":
     import numpy as np
     ema_logging.log_to_stderr(ema_logging.INFO)
-    seeds = [0, 1, 2, 3, 4]
+    seeds = [0, 1]
     for seed in seeds:
         print(f"Running for seed {seed}")
         np.random.seed(seed)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
         model, steps = get_model_for_problem_formulation(2)
 
         from ema_workbench.em_framework import sample_uncertainties
-        n_scenarios = 100
+        n_scenarios = 10
         scenarios = sample_uncertainties(model, n_scenarios)
 
         from ema_workbench import ScalarOutcome
@@ -70,7 +70,9 @@ if __name__ == "__main__":
             )
 
 
-
+        csv_path = os.path.join(archive_dir, f"results_seed_{seed}.csv")
+        results.to_csv(csv_path, index=False)
+        print(f"Results saved to {csv_path}")
 
         #fig, (ax1, ax2) = plt.subplots(ncols=2, sharex=True)
         fig, ax1 = plt.subplots(ncols=1)
