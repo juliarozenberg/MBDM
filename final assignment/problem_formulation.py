@@ -47,8 +47,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
                              problem formulations differ with respect to the objectives
                              0: Total cost, and casualties
                              1: Expected damages, costs, and casualties
-                             2: expected damages, dike investment costs, rfr costs, evacuation cost, and casualties
-                             3: costs and casualties disaggregated over dike rings, and room for the river and evacuation costs
+                             2: same as 3, but kind=minimize (used for optimizations)
+                             3: costs, casualties and dike investments costs disaggregated over provinces, and room for the river and evacuation costs (used for open exploration)
                              4: Expected damages, dike investment cost and casualties disaggregated over dike rings and room for the river and evacuation costs
                              5: disaggregate over time and space
 
@@ -62,6 +62,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
     function = DikeNetwork()
     # workbench model:
     dike_model = Model("dikesnet", function=function)
+    
+    # define Maximize and Minimize:
     MAXIMIZE = ScalarOutcome.MAXIMIZE
     MINIMIZE = ScalarOutcome.MINIMIZE
 
@@ -219,7 +221,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
             ),
         ]
 
-    # 5-objectives PF:
+    # objectives disaggregated over provinces, with kind=Minimize (used for optimization):
     elif problem_formulation_id == 2:
         outcomes = []
         annual_damage_gelderland=[]
@@ -229,8 +231,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
         dike_investment_costs_overijssel = []
         number_of_deaths_overijssel = []
 
+        # Take damage, investment cost and number of deaths for all dikes in Gelderland:
         for dike in function.dikelist[:3]:
-            print(dike)
             annual_damage_gelderland.append(f"{dike}_Expected Annual Damage")
             dike_investment_costs_gelderland.append(f"{dike}_Dike Investment Costs")
             number_of_deaths_gelderland.append(f"{dike}_Expected Number of Deaths")
@@ -262,6 +264,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
             )
         )
 
+        # Take damage, investment cost and number of deaths for all dikes in Overijssel:
         for dike in function.dikelist[-2:]:
             annual_damage_overijssel.append(f"{dike}_Expected Annual Damage")
             dike_investment_costs_overijssel.append(f"{dike}_Dike Investment Costs")
@@ -314,7 +317,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
         dike_model.outcomes = outcomes
 
 
-    # Disaggregate over locations:
+    # objectives disaggregated over provinces (used for open exploration)
     elif problem_formulation_id == 3:
         outcomes = []
         annual_damage_gelderland=[]
@@ -324,8 +327,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
         dike_investment_costs_overijssel = []
         number_of_deaths_overijssel = []
 
+        # Take damage, investment cost and number of deaths for all dikes in Gelderland:
         for dike in function.dikelist[:3]:
-            print(dike)
             annual_damage_gelderland.append(f"{dike}_Expected Annual Damage")
             dike_investment_costs_gelderland.append(f"{dike}_Dike Investment Costs")
             number_of_deaths_gelderland.append(f"{dike}_Expected Number of Deaths")
@@ -357,6 +360,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
             )
         )
 
+        # Take damage, investment cost and number of deaths for all dikes in Overijssel:
         for dike in function.dikelist[-2:]:
             annual_damage_overijssel.append(f"{dike}_Expected Annual Damage")
             dike_investment_costs_overijssel.append(f"{dike}_Dike Investment Costs")
