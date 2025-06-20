@@ -4,6 +4,7 @@ Created by:
 - Emile Wouters
 - Julia Rozenberg
 - Floris van Amersfoort
+- Tom Waldram
 
 
 This respository contains a decision-support toolkit for evaluating flood protection strategies along the IJssel River. This project applies exploratory modeling, scenario discovery, and multi-objective optimization to identify policies under deep uncertainty. The conducted analyses are mainly conducted using the EMA workbench. 
@@ -46,31 +47,31 @@ Contains a list with the libaries/dependencies which have to be installed to use
 
 Analysis & Post-processing
 File	                            Descriptopn
-Dimensional_Stacking.ipynb:        Notebook containing all the steps to perform dimensional stacking, used in the open exploration phase
-Feature Scoring.ipynb:             Notebook containing all the steps to perform Feature Scoring, used in the open exploration phase
-MORO_merge_and_filter.ipynb:       Notebook containing all steps to reduce the MORO results to one small promising policy set, fit for further analysis
-PRIM_no_policy.ipynb:              Notebook containing all the steps to a Prime Induction Method on the no policy exploration sample, part of open exploration
-PRIM_policy.ipynb:                 Notebook containing all the steps to a Prime Induction Method on the policy exploration sample, part of open exploration
-PRIM_DS.ipynb:                     Notebook containing all the steps to a Prime Induction Method on the final promising policy set, part of direct search
-Problem Formulations.ipynb:        Notebook containing steps to create experiment samples with the model, based on a specified problem formulation
-Robustness_Analysis.ipynb:         Notebook containing all the steps to a robustness analysis using regret on the policy exploration sample, part of direct search
-Sobol Sensitivity Analysis.ipynb:  Notebook containing all the steps to perform a sobol sensitivity analysis, part of open exploration
-dike_model_optimization.py:        Python file which forms a base to perform policy optimization experiments with the simulation model 
-dike_model_optimization_90.py:     Python file to conduct a MORO with the simulation model using the specified problem formulation(2). p90-based evalution. 
-dike_model_optimization_mean.py:     Python file to conduct a MORO with the simulation model using the specified problem formulation(2). mean-based evalution. 
+- Dimensional_Stacking.ipynb:        Notebook containing all the steps to perform dimensional stacking, used in the open exploration phase
+- Feature Scoring.ipynb:             Notebook containing all the steps to perform Feature Scoring, used in the open exploration phase
+- MORO_merge_and_filter.ipynb:       Notebook containing all steps to reduce the MORO results to one small promising policy set, fit for further analysis
+- PRIM_no_policy.ipynb:              Notebook containing all the steps to a Prime Induction Method on the no policy exploration sample, part of open exploration
+- PRIM_policy.ipynb:                 Notebook containing all the steps to a Prime Induction Method on the policy exploration sample, part of open exploration
+- PRIM_DS.ipynb:                     Notebook containing all the steps to a Prime Induction Method on the final promising policy set, part of direct search
+- Problem Formulations.ipynb:        Notebook containing steps to create experiment samples with the model, based on a specified problem formulation
+- Robustness_Analysis.ipynb:         Notebook containing all the steps to a robustness analysis using regret on the policy exploration sample, part of direct search
+- Sobol Sensitivity Analysis.ipynb:  Notebook containing all the steps to perform a sobol sensitivity analysis, part of open exploration
+- dike_model_optimization.py:        Python file which forms a base to perform policy optimization experiments with the simulation model 
+- dike_model_optimization_90.py:     Python file to conduct a MORO with the simulation model using the specified problem formulation(2). p90-based evalution. 
+- dike_model_optimization_mean.py:     Python file to conduct a MORO with the simulation model using the specified problem formulation(2). mean-based evalution. 
 
 
 
 Data Files
 
 File                              Description
-experiments(no policy).csv:        Experiments sample created in Problem Formulations.ipynb without policy levers, input for open exploration analyses
-experiments(no policy)_10k.csv:    Larger experiments sample created in Problem Formulations.ipynb without policy levers, input dimensional stacking
-experiments(policy).csv:           Experiments sample created in Problem Formulations.ipynb with policy levers, input for open exploration analyses
-experiments.csv:                   Experiments sample created in MORO_merge_and_filter.ipynb with promising policies, input for robustness analysis and PRIM_DS
-outcomes(no policy).csv:           Outcomes of experiments created in Problem Formulations.ipynb without policy levers, input for open exploration analyses
-outcomes(no policy)_10k.csv:       Outcomes of larger experiments sample created in Problem Formulations.ipynb without policy levers, input dimensional stacking
-outcomes(policy).csv:              Outcomes of experiments created in Problem Formulations.ipynb with policy levers, input for open exploration analyses
+- experiments(no policy).csv:        Experiments sample created in Problem Formulations.ipynb without policy levers, input for open exploration analyses
+- experiments(no policy)_10k.csv:    Larger experiments sample created in Problem Formulations.ipynb without policy levers, input dimensional stacking
+- experiments(policy).csv:           Experiments sample created in Problem Formulations.ipynb with policy levers, input for open exploration analyses
+- experiments.csv:                   Experiments sample created in MORO_merge_and_filter.ipynb with promising policies, input for robustness analysis and PRIM_DS
+- outcomes(no policy).csv:           Outcomes of experiments created in Problem Formulations.ipynb without policy levers, input for open exploration analyses
+- outcomes(no policy)_10k.csv:       Outcomes of larger experiments sample created in Problem Formulations.ipynb without policy levers, input dimensional stacking
+- outcomes(policy).csv:              Outcomes of experiments created in Problem Formulations.ipynb with policy levers, input for open exploration analyses
 
 > Map: archives_90_seed_N (MBDM > final asignment > archives_90_seed_N)
 
@@ -116,7 +117,7 @@ The conducted research project with this repository consisted of a few general p
 
 2. Install dependencies
 
-bash
+   ```bash
 pip install -r requirements.txt
 
 
