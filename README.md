@@ -25,23 +25,23 @@ Key features include:
 
 ---
 
-Repository structure
+# Repository structure
 
-Requirements.txt
+> Requirements.txt
 
 Contains a list with the libaries/dependencies which have to be installed to use the code in the repository
 
 
-Map: final assignment (MBDM > final assignment)
+> Map: final assignment (MBDM > final assignment)
 
 🔧 Model Execution                  File	Description
-dike_model_function.py	        Specifies the model structure
-dike_model_simulation	          Simulating the flood model
-funs_dikes.py	                  Specifies functions for the specific dikes in the model
-funs_economy.py                 Specifies economic functions
-funs_generate_network.py        Creates the network which is used as a base of the simulation model
-funs_hydrostat.py               Specifies water related functions
-problem_formulation.py          Specify which uncertainties and policy levers are used in the simulation, and which data you want to collect during a simulation run
+- dike_model_function.py	        Specifies the model structure
+- dike_model_simulation	          Simulating the flood model
+- funs_dikes.py	                  Specifies functions for the specific dikes in the model
+- funs_economy.py                 Specifies economic functions
+- funs_generate_network.py        Creates the network which is used as a base of the simulation model
+- funs_hydrostat.py               Specifies water related functions
+- problem_formulation.py          Specify which uncertainties and policy levers are used in the simulation, and which data you want to collect during a simulation run
 
 Analysis & Post-processing
 File	                            Descriptopn
