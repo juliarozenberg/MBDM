@@ -118,7 +118,7 @@ The conducted research project with this repository consisted of a few general p
 2. Install dependencies
 
    ```bash
-pip install -r requirements.txt
+   pip install -r requirements.txt
 
 
 
